@@ -1,4 +1,4 @@
-  import React from 'react';
+  import React, { useState } from 'react';
   import {
     AppBar,
     Box,
@@ -25,7 +25,7 @@
 
   const Header: React.FC<Props> = (props) => {
     const { window } = props;
-    const [mobileOpen, setMobileOpen] = React.useState(false);
+    const [mobileOpen, setMobileOpen] = useState(false);
     const navigate = useNavigate();
 
     const handleDrawerToggle = () => {
@@ -50,13 +50,13 @@
     const drawer = (
       <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
         <Typography variant="h6" sx={{ my: 2 }}>
-          MUI
+          Loan Calculator
         </Typography>
         <Divider />
         <List>
-          {navItems.map((item) => (
-            <ListItem key={item} disablePadding>
-              <ListItemButton sx={{ textAlign: 'center' }}>
+          {navItems.map((item, index) => (
+            <ListItem key={index} disablePadding>
+              <ListItemButton sx={{ textAlign: 'center' }} onClick={() => handleNavigate(index, item)}>
                 <ListItemText primary={item} />
               </ListItemButton>
             </ListItem>
