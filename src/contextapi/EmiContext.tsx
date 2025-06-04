@@ -22,7 +22,9 @@ interface EmiContextProps {
   setIsShowMonthlyComp: React.Dispatch<React.SetStateAction<boolean>>;
   handleMonthlyComp: () => void;
   monthlyEmi : number;
-  setMonthlyEmi : React.Dispatch<React.SetStateAction<number>>
+  setMonthlyEmi : React.Dispatch<React.SetStateAction<number>>;
+  handleCurrencyChange: (value: number, label:string) => void;
+  selectedCurrency : string;
 }
 
 const EmiContext = createContext<EmiContextProps | undefined>(undefined);
@@ -51,6 +53,8 @@ export const EmiProvider: React.FC<{ children: ReactNode }> = ({
   });
 
   const [monthlyEmi , setMonthlyEmi] = useState<number>(0)
+   const [baseEmi, setBaseEmi] = useState<number>(0);
+  const [selectedCurrency, setSelectedCurrency] = useState<string>("USD");
 
   const handleMonthlyComp = () => {
     const { amount, interest, term } = formFields;
@@ -77,10 +81,17 @@ export const EmiProvider: React.FC<{ children: ReactNode }> = ({
     const emi = numerator / denominator;
 
     console.log("EMI:", emi.toFixed(2)); // Example: 2051.65
+    setBaseEmi(emi)
     setMonthlyEmi(emi)
+    setSelectedCurrency("USD")
     setIsShowMonthlyComp(true);
   };
 
+  const handleCurrencyChange = (value : number, label:string) => {
+    const convertedEmi = baseEmi  * value;
+    setMonthlyEmi(convertedEmi)
+    setSelectedCurrency(label);
+  }
   return (
     <EmiContext.Provider
       value={{
@@ -92,7 +103,9 @@ export const EmiProvider: React.FC<{ children: ReactNode }> = ({
         setErrorFields,
         handleMonthlyComp,
         monthlyEmi,
-        setMonthlyEmi
+        setMonthlyEmi,
+        handleCurrencyChange,
+        selectedCurrency
       }}
     >
       {children}
