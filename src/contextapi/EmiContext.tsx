@@ -12,6 +12,12 @@ interface ErrorFields {
   term: boolean;
 }
 
+interface AmortizationRow {
+  month: number;
+  principal: number;
+  interest: number;
+  balance: number;
+}
 
 interface EmiContextProps {
   formFields: FormFields;
@@ -21,10 +27,11 @@ interface EmiContextProps {
   isShowMonthlyComp: boolean;
   setIsShowMonthlyComp: React.Dispatch<React.SetStateAction<boolean>>;
   handleMonthlyComp: () => void;
-  monthlyEmi : number;
-  setMonthlyEmi : React.Dispatch<React.SetStateAction<number>>;
-  handleCurrencyChange: (value: number, label:string) => void;
-  selectedCurrency : string;
+  monthlyEmi: number;
+  setMonthlyEmi: React.Dispatch<React.SetStateAction<number>>;
+  handleCurrencyChange: (value: number, label: string) => void;
+  selectedCurrency: string;
+  amortizationSchedule: AmortizationRow[];
 }
 
 const EmiContext = createContext<EmiContextProps | undefined>(undefined);
@@ -52,9 +59,12 @@ export const EmiProvider: React.FC<{ children: ReactNode }> = ({
     term: false,
   });
 
-  const [monthlyEmi , setMonthlyEmi] = useState<number>(0)
-   const [baseEmi, setBaseEmi] = useState<number>(0);
+  const [monthlyEmi, setMonthlyEmi] = useState<number>(0);
+  const [baseEmi, setBaseEmi] = useState<number>(0);
   const [selectedCurrency, setSelectedCurrency] = useState<string>("USD");
+  const [amortizationSchedule, setAmortizationSchedule] = useState<
+    AmortizationRow[]
+  >([]);
 
   const handleMonthlyComp = () => {
     const { amount, interest, term } = formFields;
@@ -81,17 +91,36 @@ export const EmiProvider: React.FC<{ children: ReactNode }> = ({
     const emi = numerator / denominator;
 
     console.log("EMI:", emi.toFixed(2)); // Example: 2051.65
-    setBaseEmi(emi)
-    setMonthlyEmi(emi)
-    setSelectedCurrency("USD")
+    setBaseEmi(emi);
+    setMonthlyEmi(emi);
+
+    // Calculate amortization
+    let balance = principal;
+    const schedule: AmortizationRow[] = [];
+
+    for (let i = 1; i <= tenureMonths; i++) {
+      const interestPart = balance * monthlyInterest;
+      const principalPart = emi - interestPart;
+      balance -= principalPart;
+
+      schedule.push({
+        month: i,
+        principal: +principalPart.toFixed(2),
+        interest: +interestPart.toFixed(2),
+        balance: +balance.toFixed(2),
+      });
+    }
+
+    setAmortizationSchedule(schedule);
+    setSelectedCurrency("USD");
     setIsShowMonthlyComp(true);
   };
 
-  const handleCurrencyChange = (value : number, label:string) => {
-    const convertedEmi = baseEmi  * value;
-    setMonthlyEmi(convertedEmi)
+  const handleCurrencyChange = (value: number, label: string) => {
+    const convertedEmi = baseEmi * value;
+    setMonthlyEmi(convertedEmi);
     setSelectedCurrency(label);
-  }
+  };
   return (
     <EmiContext.Provider
       value={{
@@ -105,7 +134,8 @@ export const EmiProvider: React.FC<{ children: ReactNode }> = ({
         monthlyEmi,
         setMonthlyEmi,
         handleCurrencyChange,
-        selectedCurrency
+        selectedCurrency,
+        amortizationSchedule
       }}
     >
       {children}
