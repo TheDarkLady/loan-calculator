@@ -1,38 +1,12 @@
 import { Box, Button, TextField } from "@mui/material";
-import React, { useState } from "react";
+// import React, { useState } from "react";
+import { useEmi } from "../contextapi/EmiContext";
 
-interface Props {
-  setIsShowMonthlyComp: React.Dispatch<React.SetStateAction<boolean>>;
-}
 
-const LoanInputComponent: React.FC<Props> = ({ setIsShowMonthlyComp }) => {
-  const [formFeilds, setFormFeilds] = useState({
-    amount: "",
-    interest: "",
-    term: "",
-  });
+const LoanInputComponent: React.FC = () => {
+  const {formFields, setFormFields, errorFields, handleMonthlyComp} = useEmi();
 
-  const [errorFields, setErrorFeilds] = useState({
-    amount: false,
-    interest: false,
-    term: false,
-  });
-
-  const handleMonthlyComp = () => {
-    const { amount, interest, term } = formFeilds;
-
-    const newErrors = {
-      amount: !amount,
-      interest: !interest,
-      term: !term,
-    };
-    setErrorFeilds(newErrors);
-
-    const hasError = Object.values(newErrors).some((err) => err);
-    if (hasError) return;
-
-    setIsShowMonthlyComp(true);
-  };
+  
   return (
     <>
       <Box
@@ -60,9 +34,9 @@ const LoanInputComponent: React.FC<Props> = ({ setIsShowMonthlyComp }) => {
             label="EMI Amount"
             type="number"
             name="amount"
-            value={formFeilds.amount}
+            value={formFields.amount}
             onChange={(e) =>
-              setFormFeilds((prev) => ({
+              setFormFields((prev) => ({
                 ...prev,
                 [e.target.name]: e.target.value,
               }))
@@ -76,9 +50,9 @@ const LoanInputComponent: React.FC<Props> = ({ setIsShowMonthlyComp }) => {
             label="Interest Rate (%)"
             type="number"
             name="interest"
-            value={formFeilds.interest}
+            value={formFields.interest}
             onChange={(e) =>
-              setFormFeilds((prev) => ({
+              setFormFields((prev) => ({
                 ...prev,
                 [e.target.name]: e.target.value,
               }))
@@ -92,9 +66,9 @@ const LoanInputComponent: React.FC<Props> = ({ setIsShowMonthlyComp }) => {
             label="Term (%)"
             type="number"
             name="term"
-            value={formFeilds.term}
+            value={formFields.term}
             onChange={(e) =>
-              setFormFeilds((prev) => ({
+              setFormFields((prev) => ({
                 ...prev,
                 [e.target.name]: e.target.value,
               }))

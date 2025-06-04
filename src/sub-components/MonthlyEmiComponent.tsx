@@ -1,21 +1,24 @@
-import React from 'react'
-import CurrencyConverter from './CurrencyConverter'
-import EmiTable from './EmiTable'
+import React from "react";
+import CurrencyConverter from "./CurrencyConverter";
+import EmiTable from "./EmiTable";
+import { useEmi } from "../contextapi/EmiContext";
+import { Box, Typography } from "@mui/material";
 
-interface Props{
-  isShowMonthyComp : boolean
-}
+const MonthlyEmiComponent: React.FC = () => {
+  const { isShowMonthlyComp, monthlyEmi } = useEmi();
 
-const MonthlyEmiComponent : React.FC<Props> = ({
-  isShowMonthyComp
-}) => {
   return (
-    <div style={{display : isShowMonthyComp ? "flex" : "none"}}>
-      <h1>&nbsp;&nbsp; - Monthly EMI Component</h1>
-      <CurrencyConverter/>
-      <EmiTable/>
-    </div>
-  )
-}
+    <>
+      <Box
+        style={{ display: isShowMonthlyComp ? "flex" : "none" }}
+        sx={{ flexDirection: "column", mt:"50px" }}
+      >
+        <Typography variant="h6">Monthly EMI : $ {monthlyEmi.toFixed(2)}</Typography>
+        <CurrencyConverter />
+        <EmiTable />
+      </Box>
+    </>
+  );
+};
 
-export default MonthlyEmiComponent
+export default MonthlyEmiComponent;
