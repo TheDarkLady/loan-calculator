@@ -1,10 +1,17 @@
+import { Box, Typography } from '@mui/material'
 import React from 'react'
+import LiveExchangeRates from '../sub-components/LiveExchangeRates'
 
 const ExchangeRates: React.FC = () => {
   return (
-    <div>
-      <h1>Exchange Rates Page</h1>
-    </div>
+    <>
+      <Box
+        sx={{display:"flex", flexDirection: "column", mt:"50px", px:"20px" }}
+      >
+        <Typography variant="h6">Live Exchange Rates (Base: USD)</Typography>
+        <LiveExchangeRates />
+      </Box>
+    </>
   )
 }
 
