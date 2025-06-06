@@ -1,10 +1,11 @@
 // theme-provider.tsx
-import React, {
+import {
   createContext,
   useContext,
   useState,
-  ReactNode,
+  type ReactNode,
 } from "react";
+
 import { createTheme, ThemeProvider as MuiThemeProvider } from "@mui/material/styles";
 import type { Theme as MuiTheme } from "@mui/material/styles";
 

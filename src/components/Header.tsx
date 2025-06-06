@@ -36,7 +36,7 @@ const Header: React.FC<Props> = (props) => {
     setMobileOpen((prevState) => !prevState);
   };
 
-  const handleNavigate = (index: number, item: string) => {
+  const handleNavigate = (item: string) => {
     if (item === "Home") navigate("/");
     else if (item === "Exchange Rates (live)") navigate("/exchange-rates");
     else if (item === "About") navigate("/about");
@@ -54,7 +54,7 @@ const Header: React.FC<Props> = (props) => {
           <ListItem key={index} disablePadding>
             <ListItemButton
               sx={{ textAlign: "center" }}
-              onClick={() => handleNavigate(index, item)}
+              onClick={() => handleNavigate(item)}
             >
               <ListItemText primary={item} />
             </ListItemButton>
@@ -96,7 +96,7 @@ const Header: React.FC<Props> = (props) => {
               <Button
                 key={index}
                 sx={{ color: "#fff" }}
-                onClick={() => handleNavigate(index, item)}
+                onClick={() => handleNavigate(item)}
               >
                 {item}
               </Button>
