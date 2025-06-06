@@ -12,7 +12,7 @@ function App() {
     <>
       <Header />
       <Routes>
-        <Route path="/loan-calculator" element={<CalculatorDashboard />} />
+        <Route path="/" element={<CalculatorDashboard />} />
         <Route path="/exchange-rates" element={<ExchangeRates />} />
         <Route path="/about" element={<About />} />
         <Route path="/error-page" element={<ErrorPage />} />
