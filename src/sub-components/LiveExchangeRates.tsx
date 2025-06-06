@@ -11,6 +11,8 @@ import {
   TablePagination,
   CircularProgress,
 } from "@mui/material";
+import axios from "axios";
+
 
 interface ExchangeRates {
   [currencyCode: string]: number;
@@ -23,24 +25,25 @@ const LiveExchangeRates: React.FC = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   useEffect(() => {
-    const fetchRates = async () => {
-      try {
-        const response = await fetch(
-          `https://v6.exchangerate-api.com/v6/${import.meta.env.VITE_API_KEY}/latest/USD`
-        );
-        const data = await response.json();
-        if (data.result === "success") {
-          setRates(data.conversion_rates);
-        }
-      } catch (error) {
-        console.error("Error fetching exchange rates:", error);
-      } finally {
-        setLoading(false);
+  const fetchRates = async () => {
+    try {
+      const response = await axios.get(
+        `https://v6.exchangerate-api.com/v6/${import.meta.env.VITE_API_KEY}/latest/USD`
+      );
+      const data = response.data;
+      if (data.result === "success") {
+        setRates(data.conversion_rates);
       }
-    };
+    } catch (error) {
+      console.error("Error fetching exchange rates:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchRates();
-  }, []);
+  fetchRates();
+}, []);
+
 
   const handleChangePage = (_: unknown, newPage: number) => {
     setPage(newPage);
